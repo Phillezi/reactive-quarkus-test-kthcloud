@@ -1,0 +1,35 @@
+services:
+  quarkus-test-reactive:
+    build:
+      context: .
+      dockerfile: native.Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST: re-psqldb
+    depends_on:
+      re-psqldb:
+        condition: service_healthy
+    restart: unless-stopped
+
+  re-psqldb:
+    image: postgres:15-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: quarkus-reactive-test
+      POSTGRES_PASSWORD: quarkus-reactive-test
+      POSTGRES_DB: db
+      KTHCLOUD_VISIBILITY: private
+    volumes:
+      - data:/var/lib/postgres/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quarkus-reactive-test -d db"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+    restart: unless-stopped
+
+volumes:
+  data:

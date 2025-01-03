@@ -1,0 +1,34 @@
+services:
+  quarkus-test-reactive:
+    build:
+      context: .
+      dockerfile: native.Dockerfile
+    ports:
+      - 8080:8080
+    environment:
+      DB_HOST: re-psqldb
+      KTHCLOUD_CORES: 0.1
+      KTHCLOUD_RAM: 0.1
+      KTHCLOUD_HEALTH_PATH: /hello
+    # depends_on conditiions are not supported on kthcloud-cli (yet),
+    #   so if: quarkus starts before the db we need to restart it
+    #          Which is very likely to happen since it is a very fast native image, and the db has to run initdb scripts
+    depends_on: [re-psqldb]
+    restart: unless-stopped
+
+  re-psqldb:
+    image: postgres:15-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: quarkus-reactive-test
+      POSTGRES_PASSWORD: quarkus-reactive-test
+      POSTGRES_DB: db
+      KTHCLOUD_VISIBILITY: private
+      KTHCLOUD_CORES: 0.1
+      KTHCLOUD_RAM: 0.1
+    volumes:
+      - data:/var/lib/postgres/data
+
+volumes:
+  data:
