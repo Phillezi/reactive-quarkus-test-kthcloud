@@ -18,7 +18,7 @@ docker compose up
 - `kthcloud-cli`
 - `Docker`
 
-> !NOTE
+> [!NOTE]
 > If quarkus starts before the db, (very likely since it is a fast native image and the db has init scripts to run). You might have to manually restart it when the db is up again.
 
 ### Linux / macOS
@@ -45,7 +45,7 @@ kthcloud compose up --build --non-interactive --try-volumes
 
 Create the required volume manually in the root of you kthcloud storagemanager:
 
-> !NOTE
+> [!NOTE]
 > This path is created by hashing the service names, if you change the names of the services you will have to use the new hash, check it with the `kthcloud compose parse` command.
 
 ```txt
@@ -60,8 +60,8 @@ kthcloud compose up --build --non-interactive
 
 ### Locally
 
-Check[here](http://localhost:8080/persons) 
+Check: [here](http://localhost:8080/persons) 
 
 ### kthcloud
 
-Check:`https://<your-quarkus-service-name>.app.cloud.cbh.kth.se/persons`
+Check: `https://<your-quarkus-service-name>.app.cloud.cbh.kth.se/persons`
